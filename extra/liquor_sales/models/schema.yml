@@ -36,5 +36,23 @@ models:
           arguments:
             expression: "ROUND(sale_dollars, 1) = TRUNC(bottles_sold * state_bottle_retail, 1)"
             severity: error # accepts only `error` and `warn` default is error
-
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "sale_dollars >= 0"
+            severity: error
+      - dbt_expectations.expect_column_values_to_be_between:
+          arguments:
+            column_name: sale_dollars
+            min_value: 0
+            max_value: 1000000000
+  - name: invoice_and_item_number
+    tests:
+      - dbt_expectations.expect_column_values_to_be_of_type:
+          arguments:
+            column_type: string
+  - name: date
+    tests:
+      - dbt_expectations.expect_column_values_to_be_of_type:
+          arguments:
+            column_type: date
 
